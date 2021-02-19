@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using challenge_servicios;
+using challenge_servicios.implementaciones;
+using challenge_servicios.servicios;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -26,6 +29,11 @@ namespace challenge_be_ml
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            services.AddScoped<Locator, SpaceshipLocator>();
+            services.AddScoped<Trilateration, Trilateration2D>();
+            services.AddScoped<MessageGenerator, SatellitesMessageGenerator>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
