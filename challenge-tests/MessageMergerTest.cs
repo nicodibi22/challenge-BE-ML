@@ -58,10 +58,25 @@ namespace challenge_tests
             Assert.Throws<ArgumentException>(() => messageGenerator.GetMessage(new string[] { "m1" }));
         }
 
+        [Test]
         public void MasMensajesQueSatelistes_ArgumentException_Test()
         {
             MessageGenerator messageGenerator = new SatellitesMessageGenerator(new SimpleArrayStringMerge());
             Assert.Throws<ArgumentException>(() => messageGenerator.GetMessage(new string[] { "m1" }, new string[] { "m2" }, new string[] { "m3" }, new string[] { "m4" }));
+        }
+
+        [Test]
+        public void ArreglosConTamaniosInvalidos_ArgumentException_Test()
+        {
+            MessageGenerator messageGenerator = new SatellitesMessageGenerator(new SimpleArrayStringMerge());
+            Assert.Throws<ArgumentException>(() => messageGenerator.GetMessage(new string[] { "m1" }, new string[] { "m2", "mensaje" }, new string[] { "m3", "prueba", "mensaje" }));
+        }
+
+        [Test]
+        public void ArreglosConMasDeUnaPosicionDeDiferencia_ArgumentException_Test()
+        {
+            MessageGenerator messageGenerator = new SatellitesMessageGenerator(new SimpleArrayStringMerge());
+            Assert.Throws<ArgumentException>(() => messageGenerator.GetMessage(new string[] { "m1" }, new string[] { "m2", "", "mensaje" }, new string[] { "m3", "prueba", "mensaje" }));
         }
     }
 }

@@ -33,11 +33,21 @@ namespace challenge_servicios.implementaciones
         {
             if (messages == null)
             {
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("No se recibieron mensajes.");
             }
             if (messages.Length != 3)
             {
-                throw new ArgumentException();   
+                throw new ArgumentException("No se recibieron la cantidad de mensajes adecuados. Cantidad de mensajes recibidos: " + messages.Length );   
+            }
+            if (messages[0].Length != messages[1].Length && messages[0].Length != messages[2].Length
+                && messages[1].Length != messages[2].Length)
+            {
+                throw new ArgumentException("El tamaño de los mensajes es incorrecto.");
+            }
+            if (Math.Abs(messages[0].Length - messages[1].Length) > 1 || Math.Abs(messages[0].Length - messages[2].Length) > 1
+                || Math.Abs(messages[1].Length - messages[2].Length) > 1)
+            {
+                throw new ArgumentException("El tamaño de los mensajes es incorrecto.");
             }
             string[] result = Solve(messages);
             return string.Join(" ", result); // Concatena las cadenas del resultado obtenido separandolas por un espacio.
