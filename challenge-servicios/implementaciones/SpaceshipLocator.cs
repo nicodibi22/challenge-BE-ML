@@ -27,9 +27,9 @@ namespace challenge_servicios
         {
             if (distances.Length != _appSettings.satellites.Count)
                 throw new ArgumentException("La cantidad de distancias obtenidas no es la esperada para calcular la posición. Cantidad distancias recibidas: " + distances.Length);
-            PointDouble pointResult = _trilateration.GetCoordinate(new PointDouble() { X = _appSettings.satellites.First(s => s.Name.ToLower().Equals(Constants.SATELLITEONENAME)).CoordinateX, Y = _appSettings.satellites.First(s => s.Name.ToLower().Equals(Constants.SATELLITEONENAME)).CoordinateY }, 
-                new PointDouble() { X = _appSettings.satellites.First(s => s.Name.ToLower().Equals(Constants.SATELLITETWONAME)).CoordinateX, Y = _appSettings.satellites.First(s => s.Name.ToLower().Equals(Constants.SATELLITETWONAME)).CoordinateY }, 
-                new PointDouble() { X = _appSettings.satellites.First(s => s.Name.ToLower().Equals(Constants.SATELLITETHREENAME)).CoordinateX, Y = _appSettings.satellites.First(s => s.Name.ToLower().Equals(Constants.SATELLITETHREENAME)).CoordinateY },
+            PointDouble pointResult = _trilateration.GetCoordinate(new PointDouble() { X = _appSettings.satellites[0].CoordinateX, Y = _appSettings.satellites[0].CoordinateY }, 
+                new PointDouble() { X = _appSettings.satellites[1].CoordinateX, Y = _appSettings.satellites[1].CoordinateY }, 
+                new PointDouble() { X = _appSettings.satellites[2].CoordinateX, Y = _appSettings.satellites[2].CoordinateY },
                 distances[0], distances[1], distances[2]);
             return new PointFloat() { X = Convert.ToSingle(pointResult.X), Y = Convert.ToSingle(pointResult.Y) };
         }

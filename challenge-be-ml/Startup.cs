@@ -44,8 +44,7 @@ namespace challenge_be_ml
 
             services.AddScoped<Locator, SpaceshipLocator>();
             services.AddScoped<Trilateration, Trilateration2D>();
-            services.AddScoped<MessageGenerator, SatellitesMessageGenerator>();
-            services.AddScoped<StrategyStringMerger, SimpleArrayStringMerge>();
+            services.AddScoped<MessageGenerator, SatellitesMessageGenerator>();         
 
         }
 

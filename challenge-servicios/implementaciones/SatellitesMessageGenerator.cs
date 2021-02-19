@@ -11,10 +11,9 @@ namespace challenge_servicios.implementaciones
     /// </summary>
     public class SatellitesMessageGenerator : MessageGenerator
     {
-        StrategyStringMerger _merger;
-        public SatellitesMessageGenerator(StrategyStringMerger merger)
+        
+        public SatellitesMessageGenerator()
         {
-            this._merger = merger;
         }
 
         /// <summary>
@@ -117,63 +116,15 @@ namespace challenge_servicios.implementaciones
         public string[][] Solutions(params string[][] messages)
         {            
             int length = messages.Min(x => x.Length);
-            var resultsMergeM1M2 = MatrixStringMerge(messages[0], messages[1], length);
+            var resultsMergeM1M2 = StringMerge.MatrixStringMerge(messages[0], messages[1], length);
             var resultMergeFinal = new List<string[]>();
             foreach (var resultMergeM1M2 in resultsMergeM1M2)
             {
-                resultMergeFinal.AddRange(MatrixStringMerge(resultMergeM1M2, messages[2], length));
+                resultMergeFinal.AddRange(StringMerge.MatrixStringMerge(resultMergeM1M2, messages[2], length));
             }
                         
             return resultMergeFinal.ToArray();
         }
-
-        /// <summary>
-        /// Obtiene una matriz con todos los resultados de mergear dos arreglos.
-        /// </summary>
-        /// <param name="message1">Mensaje 1 con arreglo de cadenas</param>
-        /// <param name="message2">Mensaje 2 con arreglo de cadenas</param>
-        /// <param name="length">Tamaño del arreglo resultante de mergear</param>
-        /// <returns>Matriz con todos los posibles arreglos mergeados</returns>
-        public string[][] MatrixStringMerge(string[] arrayMessageOne, string[] arrayMessageTwo, int length)
-        {
-
-            var result = new List<string []>();
-            for (int i = 0; i <= arrayMessageOne.Length - length; i++)
-            {
-                for (int j = 0; j <= arrayMessageTwo.Length - length; j++)
-                {
-                    result.Add(ArrayStringMerge(arrayMessageOne.Skip(i).Take(length).ToArray(), arrayMessageTwo.Skip(j).Take(length).ToArray()));
-                }
-            }
-            return result.ToArray();
-        }
-
-        /// <summary>
-        /// Obtiene un arreglo que se obtiene de mergear dos arreglos con los siguientes criterios:
-        /// - Si la palabra es la misma en el mismo índice de los arreglos, se mantiene la palabra en ese índice del resultado.
-        /// - Si una palabra es vacío y otra no lo es, en el mismo índice, predomina la palabra no vacía para ese índice del resultado.
-        /// - Si las palabras en el mismo índice son distintas, en ese índice del resultado corresponde vacío.
-        /// </summary>
-        /// <param name="arrayMessageOne">Mensaje 1 con arreglo de cadenas</param>
-        /// <param name="arrayMessageTwo">Mensaje 2 con arreglo de cadenas</param>
-        /// <returns>Un arreglo con el merge de ambos mensajes</returns>
-        public string[] ArrayStringMerge(string[] arrayMessageOne, string[] arrayMessageTwo)
-        {
-            var result = new List<string>();
-
-            for (int index = 0; index < arrayMessageOne.Length; index++)
-            {
-                if (arrayMessageOne[index].Equals(arrayMessageTwo[index]))
-                    result.Add(arrayMessageOne[index]);
-                else if (string.IsNullOrEmpty(arrayMessageOne[index]))
-                    result.Add(arrayMessageTwo[index]);
-                else if (string.IsNullOrEmpty(arrayMessageTwo[index]))
-                    result.Add(arrayMessageOne[index]);
-                else
-                    result.Add(string.Empty);
-            }
-
-            return result.ToArray();
-        }        
+        
     }
 }

@@ -34,7 +34,7 @@ namespace challenge_servicios.implementaciones
 
             // ey = (P3 - P1 - i · ex) / ‖P3 - P1 - i · ex‖
             PointDouble aux2 = new PointDouble() { X = point3.X - point1.X - i * ex.X, Y = point3.Y - point1.Y - i * ex.Y };
-            PointDouble ey = new PointDouble() { X = aux2.X / norm(aux2), Y = aux2.Y / norm(aux2) };
+            PointDouble ey = new PointDouble() { X = aux2.X / Norm(aux2), Y = aux2.Y / Norm(aux2) };
 
             // j = ey(P3 - P1)
             double j = ey.X * aux.X + ey.Y * aux.Y;
@@ -57,7 +57,7 @@ namespace challenge_servicios.implementaciones
         /// </summary>
         /// <param name="point">Punto a obtener la norma</param>
         /// <returns>Norma de un vector</returns>
-        private double norm(PointDouble point)
+        private double Norm(PointDouble point)
         {
             return Math.Pow(Math.Pow(point.X, 2) + Math.Pow(point.Y, 2), .5);
         }

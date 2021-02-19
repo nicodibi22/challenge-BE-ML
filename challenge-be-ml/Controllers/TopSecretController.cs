@@ -35,14 +35,15 @@ namespace challenge_be_ml
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [Produces("application/json")]        
-        public async Task<IActionResult> TopSecretAllSatellites([FromBody]ListSatellites satellites)
+        public async Task<IActionResult> TopSecretAllSatellites([FromBody]ListSatellites listSatellites)
         {
             if (!ModelState.IsValid)
                 return BadRequest(new { message = "Verificar parámetros de entrada." });
             try
             {
-                PointFloat position = _locator.GetLocation(satellites.satellites.Select(s => s.distance.Value).ToArray());
-                string message = _messageGenerator.GetMessage(satellites.satellites.Select(s => s.message).ToArray());
+                listSatellites.satellites.ForEach(s => { if (!_appSettings.satellites.Exists(a => a.Name.ToLower() == s.name)) throw new ArgumentException("Los satélites proporcionados no son válidos."); });
+                PointFloat position = _locator.GetLocation(listSatellites.satellites.Select(s => s.distance.Value).ToArray());
+                string message = _messageGenerator.GetMessage(listSatellites.satellites.Select(s => s.message).ToArray());
                 return Ok(new { position = new { x = position.X, y = position.Y }, message = message });
             }
             catch (ArgumentNullException ex)
@@ -70,7 +71,7 @@ namespace challenge_be_ml
             if (!ModelState.IsValid)
                 return BadRequest(new { message = "Verificar parámetros de entrada." });
             if (!_appSettings.satellites.Exists(s => s.Name.ToLower().Equals(satellite_name.ToLower())))
-                return BadRequest("La información proporcionada es incorrecta. Satélite: " + satellite_name);
+                return BadRequest(new { message = "La información proporcionada es incorrecta. Satélite: " + satellite_name } );
             var satelliteData = JsonConvert.SerializeObject(satellite);
             HttpContext.Session.SetString(satellite_name.ToLower(), satelliteData);
             return Ok();           
