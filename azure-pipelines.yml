@@ -28,15 +28,9 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
-- task: VSTest@2
-  inputs:
-    platform: 'Any CPU'
-    Framework: '.NETFramework,Version=v4.7.1'
-    command: test
-    projects: '**/challenge-tests/*.csproj'
-    arguments: '--configuration $(buildConfiguration)'
-- task: PublishTestResults@2
-  inputs:
-    testResultsFormat: 'NUnit'
-    testResultsFiles: '**/TEST-*.xml'
 - task: PublishBuildArtifacts@1
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'test'
+    projects: '**/*challenge-tests/*.csproj'
+    arguments: '--configuration $(buildConfiguration)'
