@@ -26,17 +26,33 @@ namespace challenge_tests
         {
             AppSettings settings = new AppSettings();
             settings.satellites = new List<Satellite>();
-            settings.satellites.Add(new Satellite() { CoordinateX = 1.0F, CoordinateY = 1.0F });
-            settings.satellites.Add(new Satellite() { CoordinateX = 1.0F, CoordinateY = 1.0F });
-            settings.satellites.Add(new Satellite() { CoordinateX = 1.0F, CoordinateY = 1.0F });
+            settings.satellites.Add(new Satellite() { CoordinateX = 1.0F, CoordinateY = 1.0F, Name = "Kenobi" });
+            settings.satellites.Add(new Satellite() { CoordinateX = 1.0F, CoordinateY = 1.0F, Name = "Sato" });
+            settings.satellites.Add(new Satellite() { CoordinateX = 1.0F, CoordinateY = 1.0F, Name = "Skywalker" });
             return settings;
         }
 
         [Test]
-        public void MensajesConDesfasaje_MensajesNoVaciosTest()
+        public void ObtenerUbicacionConUnaDistancia_ArgumentExcepcion_Test()
         {            
             Locator locator = new SpaceshipLocator(new Trilateration2D(), _settings.Object);
             Assert.Throws<ArgumentException>(() => locator.GetLocation(new float[] { 2.0F }));
+        }
+
+        [Test]
+        public void ObtenerUbicacionConCuatroDistancias_ArgumentExcepcion_Test()
+        {
+            Locator locator = new SpaceshipLocator(new Trilateration2D(), _settings.Object);
+            Assert.Throws<ArgumentException>(() => locator.GetLocation(new float[] { 2.0F, 12.0F, 13.0F, 10.0F }));
+        }
+
+        [Test]
+        public void ObtenerUbicacionConTresDistancias_Ok_Test()
+        {
+            Locator locator = new SpaceshipLocator(new Trilateration2D(), _settings.Object);
+            PointFloat point = locator.GetLocation(new float[] { 10.0F, 10.0F, 10.0F });
+            Assert.IsNotNull(point.X);
+            Assert.IsNotNull(point.Y);
         }
     }
 }

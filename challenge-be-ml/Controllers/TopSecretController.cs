@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Satellite = challenge_be_ml.Models.Satellite;
 
 namespace challenge_be_ml
 {
@@ -38,7 +39,7 @@ namespace challenge_be_ml
         {
             try
             {
-                Point position = _locator.GetLocation(satellites.satellites.Select(s => s.distance).ToArray());
+                PointFloat position = _locator.GetLocation(satellites.satellites.Select(s => s.distance).ToArray());
                 string message = _messageGenerator.GetMessage(satellites.satellites.Select(s => s.message).ToArray());
                 return Ok(new { position = new { x = position.X, y = position.Y }, message = message });
             }
@@ -82,11 +83,12 @@ namespace challenge_be_ml
             try
             {
                 _appSettings.satellites.ForEach(s => { if (HttpContext.Session.GetString(s.Name.ToLower()) == null) throw new NullReferenceException("No hay suficiente información "); });
-
-                //Point position = _locator.GetLocation(satellites.satellites.Select(s => s.distance).ToArray());
-                //string message = _messageGenerator.GetMessage(satellites.satellites.Select(s => s.message).ToArray());
-                //return Ok(new { position = new { x = position.X, y = position.Y }, message = message });
-                return Ok("hola");
+                Satellite satellite1 = JsonConvert.DeserializeObject<Satellite>(HttpContext.Session.GetString(_appSettings.satellites[0].Name.ToLower()));
+                Satellite satellite2 = JsonConvert.DeserializeObject<Satellite>(HttpContext.Session.GetString(_appSettings.satellites[1].Name.ToLower()));
+                Satellite satellite3 = JsonConvert.DeserializeObject<Satellite>(HttpContext.Session.GetString(_appSettings.satellites[2].Name.ToLower()));
+                PointFloat position = _locator.GetLocation(new float[] { satellite1.distance, satellite2.distance, satellite3.distance });
+                string message = _messageGenerator.GetMessage(satellite1.message, satellite2.message, satellite3.message);
+                return Ok(new { position = new { x = position.X, y = position.Y }, message = message });
             }
             catch (ArgumentNullException ex)
             {

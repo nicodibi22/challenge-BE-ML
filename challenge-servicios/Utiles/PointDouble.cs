@@ -4,9 +4,9 @@ using System.Text;
 
 namespace challenge_servicios.Utils
 {
-    public class PointFloat
+    public class PointDouble
     {
-        public float X { get; set; }
-        public float Y { get; set; }
+        public double X { get; set; }
+        public double Y { get; set; }
     }
 }

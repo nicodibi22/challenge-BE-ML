@@ -18,23 +18,23 @@ namespace challenge_servicios.implementaciones
         /// <param name="distance2">Distancia del punto 2 al punto a encontrar</param>
         /// <param name="distance3">Distancia del punto 3 al punto a encontrar</param>
         /// <returns>Punto a encontrar</returns>
-        public Point GetCoordinate(Point point1, Point point2, Point point3, double distance1, double distance2, double distance3)
+        public PointDouble GetCoordinate(PointDouble point1, PointDouble point2, PointDouble point3, double distance1, double distance2, double distance3)
         {
-            Point resultPoint = new Point();
+            PointDouble resultPoint = new PointDouble();
 
             // p2p1Distance = ‖P2 - P1‖
             double p2p1Distance = Math.Pow(Math.Pow(point2.X - point1.X, 2) + Math.Pow(point2.Y - point1.Y, 2), 0.5);
 
             // ex = (P2 - P1) / p2p1Distance
-            Point ex = new Point() { X = (point2.X - point1.X) / p2p1Distance, Y = (point2.Y - point1.Y) / p2p1Distance };
+            PointDouble ex = new PointDouble() { X = (point2.X - point1.X) / p2p1Distance, Y = (point2.Y - point1.Y) / p2p1Distance };
 
             // i = ex(P3 - P1)
-            Point aux = new Point() { X = point3.X - point1.X, Y = point3.Y - point1.Y };            
+            PointDouble aux = new PointDouble() { X = point3.X - point1.X, Y = point3.Y - point1.Y };            
             double i = ex.X * aux.X + ex.Y * aux.Y;
-            
+
             // ey = (P3 - P1 - i · ex) / ‖P3 - P1 - i · ex‖
-            Point aux2 = new Point() { X = point3.X - point1.X - i * ex.X, Y = point3.Y - point1.Y - i * ex.Y };
-            Point ey = new Point() { X = aux2.X / norm(aux2), Y = aux2.Y / norm(aux2) };
+            PointDouble aux2 = new PointDouble() { X = point3.X - point1.X - i * ex.X, Y = point3.Y - point1.Y - i * ex.Y };
+            PointDouble ey = new PointDouble() { X = aux2.X / norm(aux2), Y = aux2.Y / norm(aux2) };
 
             // j = ey(P3 - P1)
             double j = ey.X * aux.X + ey.Y * aux.Y;
@@ -57,7 +57,7 @@ namespace challenge_servicios.implementaciones
         /// </summary>
         /// <param name="point">Punto a obtener la norma</param>
         /// <returns>Norma de un vector</returns>
-        private double norm(Point point)
+        private double norm(PointDouble point)
         {
             return Math.Pow(Math.Pow(point.X, 2) + Math.Pow(point.Y, 2), .5);
         }

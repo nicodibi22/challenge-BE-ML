@@ -13,15 +13,7 @@ namespace challenge_tests
         }
 
         [Test]
-        public void MensajesConDesfasaje_MensajesNoVaciosTest()
-        {
-            MessageGenerator messageGenerator = new SatellitesMessageGenerator(new SimpleArrayStringMerge());
-            string result = messageGenerator.GetMessage(new string[] { "1", "" }, new string[] { "", "1", "" }, new string[] { "", "", "2" });
-            Assert.AreEqual("1 2", result);
-        }
-
-        [Test]
-        public void MensajesSinDesfasaje_MensajesNoVaciosTest()
+        public void MensajesSinDesfasaje_MensajesNoVacios_Test()
         {
             MessageGenerator messageGenerator = new SatellitesMessageGenerator(new SimpleArrayStringMerge());
             string result = messageGenerator.GetMessage(new string[] { "este", "", "", "mensaje", ""}, new string[] { "", "es", "", "", "secreto" }, new string[] { "este", "", "un", "", "" });
@@ -29,7 +21,7 @@ namespace challenge_tests
         }
 
         [Test]
-        public void MensajesConDesfasaje_UnMensajesVaciosTest()
+        public void MensajesConDesfasaje_UnMensajeVacios_Test()
         {
             MessageGenerator messageGenerator = new SatellitesMessageGenerator(new SimpleArrayStringMerge());
             string result = messageGenerator.GetMessage(new string[] { "1", "" }, new string[] { "", "1", "" }, new string[] { "", "", "" });
@@ -37,11 +29,39 @@ namespace challenge_tests
         }
 
         [Test]
-        public void MensajesSinDesfasaje_UnMensajeVaciosTest()
+        public void MensajesSinDesfasaje_UnMensajeVacio_Test()
         {
             MessageGenerator messageGenerator = new SatellitesMessageGenerator(new SimpleArrayStringMerge());
             string result = messageGenerator.GetMessage(new string[] { "este", "", "", "mensaje", "" }, new string[] { "", "es", "", "", "secreto" }, new string[] { "", "", "", "", "" });
             Assert.AreEqual("este es  mensaje secreto", result);
+        }
+
+        [Test]
+        public void MensajesConDesfasaje_MensajesNoVacios_Test()
+        {
+            MessageGenerator messageGenerator = new SatellitesMessageGenerator(new SimpleArrayStringMerge());
+            string result = messageGenerator.GetMessage(new string[] { "", "este", "es", "un", "mensaje" }, new string[] { "este", "", "un", "mensaje" }, new string[] { "", "", "es", "", "mensaje" });
+            Assert.AreEqual("este es un mensaje", result);
+        }
+
+        [Test]
+        public void MensajesNulos_ArgumentNullException_Test()
+        {
+            MessageGenerator messageGenerator = new SatellitesMessageGenerator(new SimpleArrayStringMerge());
+            Assert.Throws<ArgumentNullException>(() => messageGenerator.GetMessage(null));            
+        }
+
+        [Test]
+        public void MenosMensajesQueSatelistes_ArgumentException_Test()
+        {
+            MessageGenerator messageGenerator = new SatellitesMessageGenerator(new SimpleArrayStringMerge());
+            Assert.Throws<ArgumentException>(() => messageGenerator.GetMessage(new string[] { "m1" }));
+        }
+
+        public void MasMensajesQueSatelistes_ArgumentException_Test()
+        {
+            MessageGenerator messageGenerator = new SatellitesMessageGenerator(new SimpleArrayStringMerge());
+            Assert.Throws<ArgumentException>(() => messageGenerator.GetMessage(new string[] { "m1" }, new string[] { "m2" }, new string[] { "m3" }, new string[] { "m4" }));
         }
     }
 }

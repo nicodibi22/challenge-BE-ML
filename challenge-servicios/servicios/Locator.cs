@@ -13,6 +13,6 @@ namespace challenge_servicios.servicios
         /// <param name="distances">Distancias de cada uno de los satélites a la nave a localizar.</param>
         /// <returns>Coordenada de la nave a localizar.</returns>
         /// <exception cref="System.ArgumentException">La cantidad de distancias no coincide con la cantidad de satélites</exception>
-        Point GetLocation(params float[] distances);
+        PointFloat GetLocation(params float[] distances);
     }
 }

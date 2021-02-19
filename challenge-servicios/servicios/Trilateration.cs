@@ -18,7 +18,7 @@ namespace challenge_servicios.servicios
         /// <param name="distance2">Distancia del punto 2 al punto a encontrar</param>
         /// <param name="distance3">Distancia del punto 3 al punto a encontrar</param>
         /// <returns>Punto a encontrar</returns>
-        Point GetCoordinate(Point point1, Point point2, Point point3,
+        PointDouble GetCoordinate(PointDouble point1, PointDouble point2, PointDouble point3,
             double distance1, double distance2, double distance3);
     }
 }
