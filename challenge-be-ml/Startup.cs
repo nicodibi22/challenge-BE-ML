@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using challenge_be_ml.Utils;
 using challenge_servicios;
 using challenge_servicios.implementaciones;
 using challenge_servicios.servicios;
@@ -30,6 +31,17 @@ namespace challenge_be_ml
         {
             services.AddControllers();
 
+            services.AddDistributedMemoryCache();
+            var appSettingsSection = Configuration.GetSection("AppSettings");
+            services.Configure<AppSettings>(appSettingsSection);
+            //var appSettings = appSettingsSection.Get<AppSettings>();
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(10);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+
             services.AddScoped<Locator, SpaceshipLocator>();
             services.AddScoped<Trilateration, Trilateration2D>();
             services.AddScoped<MessageGenerator, SatellitesMessageGenerator>();
@@ -50,6 +62,8 @@ namespace challenge_be_ml
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {

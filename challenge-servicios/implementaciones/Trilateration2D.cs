@@ -8,34 +8,58 @@ namespace challenge_servicios.implementaciones
 {
     public class Trilateration2D : Trilateration
     {
+        /// <summary>
+        /// Obtiene un punto a través de tres puntos conocidos y la distancia de estos hacia el punto a obtener
+        /// </summary>
+        /// <param name="point1">Coordenada del punto 1</param>
+        /// <param name="point2">Coordenada del punto 2</param>
+        /// <param name="point3">Coordenada del punto 3</param>
+        /// <param name="distance1">Distancia del punto 1 al punto a encontrar</param>
+        /// <param name="distance2">Distancia del punto 2 al punto a encontrar</param>
+        /// <param name="distance3">Distancia del punto 3 al punto a encontrar</param>
+        /// <returns>Punto a encontrar</returns>
         public Point GetCoordinate(Point point1, Point point2, Point point3, double distance1, double distance2, double distance3)
         {
-            Point resultPose = new Point();
-            //unit vector in a direction from point1 to point 2
+            Point resultPoint = new Point();
+
+            // p2p1Distance = ‖P2 - P1‖
             double p2p1Distance = Math.Pow(Math.Pow(point2.X - point1.X, 2) + Math.Pow(point2.Y - point1.Y, 2), 0.5);
+
+            // ex = (P2 - P1) / p2p1Distance
             Point ex = new Point() { X = (point2.X - point1.X) / p2p1Distance, Y = (point2.Y - point1.Y) / p2p1Distance };
-            Point aux = new Point() { X = point3.X - point1.X, Y = point3.Y - point1.Y };
-            //signed magnitude of the x component
+
+            // i = ex(P3 - P1)
+            Point aux = new Point() { X = point3.X - point1.X, Y = point3.Y - point1.Y };            
             double i = ex.X * aux.X + ex.Y * aux.Y;
-            //the unit vector in the y direction. 
+            
+            // ey = (P3 - P1 - i · ex) / ‖P3 - P1 - i · ex‖
             Point aux2 = new Point() { X = point3.X - point1.X - i * ex.X, Y = point3.Y - point1.Y - i * ex.Y };
             Point ey = new Point() { X = aux2.X / norm(aux2), Y = aux2.Y / norm(aux2) };
-            //the signed magnitude of the y component
+
+            // j = ey(P3 - P1)
             double j = ey.X * aux.X + ey.Y * aux.Y;
-            //coordinates
+
+            // x = (r12 - r22 + 2 · p2p1Distance) / 2 · p2p1Distance
             double x = (Math.Pow(distance1, 2) - Math.Pow(distance2, 2) + Math.Pow(p2p1Distance, 2)) / (2 * p2p1Distance);
+            // y = (r12 - r32 + i2 + j2) / 2j - ix / j
             double y = (Math.Pow(distance1, 2) - Math.Pow(distance3, 2) + Math.Pow(i, 2) + Math.Pow(j, 2)) / (2 * j) - i * x / j;
-            //result coordinates
+            
+            // Resultado final
             double finalX = point1.X + x * ex.X + y * ey.X;
             double finalY = point1.Y + x * ex.Y + y * ey.Y;
-            resultPose.X = finalX;
-            resultPose.Y = finalY;
-            return resultPose;
+            resultPoint.X = finalX;
+            resultPoint.Y = finalY;
+            return resultPoint;
         }
 
-        private double norm(Point p) // get the norm of a vector
+        /// <summary>
+        /// Obtiene la norma de un vector ‖P‖ = sqrt((P.X)^2 + (P.Y)^2)
+        /// </summary>
+        /// <param name="point">Punto a obtener la norma</param>
+        /// <returns>Norma de un vector</returns>
+        private double norm(Point point)
         {
-            return Math.Pow(Math.Pow(p.X, 2) + Math.Pow(p.Y, 2), .5);
+            return Math.Pow(Math.Pow(point.X, 2) + Math.Pow(point.Y, 2), .5);
         }
     }
 }

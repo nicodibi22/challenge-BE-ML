@@ -40,9 +40,14 @@ namespace challenge_servicios.implementaciones
                 throw new ArgumentException();   
             }
             string[] result = Solve(messages);
-            return string.Join(" ", result);
+            return string.Join(" ", result); // Concatena las cadenas del resultado obtenido separandolas por un espacio.
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="messages"></param>
+        /// <returns></returns>
         public string[] Solve(params string[][] messages)
         {
             string[][] solutions = Solutions(messages);
@@ -51,22 +56,42 @@ namespace challenge_servicios.implementaciones
             
         }
 
+        /// <summary>
+        /// Obtiene entre las posibles soluciones aquella solución con menos cadenas vacías
+        /// y con menos repetición de palabras.
+        /// </summary>
+        /// <param name="solutions">Todas las posibles soluciones de mensajes a formar.</param>
+        /// <returns>La solución determinada cómo la mejor.</returns>
         private string[] BestSolution(string[][] solutions)
         {
+            // La primer posible solución comienza siendo la factible hasta que se verifiquen el restos de las posibles soluciones
             string[] solution = solutions[0];
+
             string[] auxSolution;
             int? repetitions;
+
+            // Se almacena en un diccionario todas las palabras y sus respectivas aparaciones en el posible mensaje
             Dictionary<string, int> stringsRepetitions = solution.GroupBy(x => x)
                 .ToDictionary(x => x.Key, x => x.Count());
-            repetitions = stringsRepetitions.Count(x => !x.Key.Equals(""));
+
+            // Se almacena la cantidad de palabras distintas a vacío que hay en el arreglo del posible mensaje.
+            repetitions = stringsRepetitions.Count(x => !x.Key.Equals("")); 
+
             Dictionary<string, int> auxStringsRepetitions;
             for (int i = 1; i < solutions.Length; i++)
             {
                 auxSolution = solutions[i];
+                
+                // Se almacena en un diccionario auxiliar todas las palabras y sus respectivas aparaciones en el posible mensaje
                 auxStringsRepetitions = auxSolution.GroupBy(x => x)
-                .ToDictionary(x => x.Key, x => x.Count());
+                    .ToDictionary(x => x.Key, x => x.Count());
+
+                // Se verifica si en el diccionario auxiliar hay más palabras sin repetir que en el diccionario original
                 if (auxStringsRepetitions.Count(x => !x.Key.Equals("")) > repetitions)
                 {
+                    // Si hay más palabras sin repetir se determina que es un mensaje más certero, 
+                    // ya que la repetición de palabras se puede deber al desfasaje del mensaje.
+                    // Se modifica diccionario y posible solución
                     repetitions = auxStringsRepetitions.Count(x => !x.Key.Equals(""));
                     solution = auxSolution;
                 }
@@ -74,6 +99,11 @@ namespace challenge_servicios.implementaciones
             return solution;
         }
 
+        /// <summary>
+        /// Obtiene todas las posibles soluciones de mergear las 3 cadenas obtenidas de los satelites
+        /// </summary>
+        /// <param name="messages">Arreglo los 3 mensajes obtenidos de los satélites</param>
+        /// <returns>Todas las soluciones posibles de mergear las cadenas de los satélites.</returns>
         public string[][] Solutions(params string[][] messages)
         {            
             int length = messages.Min(x => x.Length);
@@ -87,21 +117,36 @@ namespace challenge_servicios.implementaciones
             return resultMergeFinal.ToArray();
         }
 
-
-        public string[][] MatrixStringMerge(string[] message1, string[] message2, int length)
+        /// <summary>
+        /// Obtiene una matriz con todos los resultados de mergear dos arreglos.
+        /// </summary>
+        /// <param name="message1">Mensaje 1 con arreglo de cadenas</param>
+        /// <param name="message2">Mensaje 2 con arreglo de cadenas</param>
+        /// <param name="length">Tamaño del arreglo resultante de mergear</param>
+        /// <returns>Matriz con todos los posibles arreglos mergeados</returns>
+        public string[][] MatrixStringMerge(string[] arrayMessageOne, string[] arrayMessageTwo, int length)
         {
 
             var result = new List<string []>();
-            for (int i = 0; i <= message1.Length - length; i++)
+            for (int i = 0; i <= arrayMessageOne.Length - length; i++)
             {
-                for (int j = 0; j <= message2.Length - length; j++)
+                for (int j = 0; j <= arrayMessageTwo.Length - length; j++)
                 {
-                    result.Add(ArrayStringMerge(message1.Skip(i).Take(length).ToArray(), message2.Skip(j).Take(length).ToArray()));
+                    result.Add(ArrayStringMerge(arrayMessageOne.Skip(i).Take(length).ToArray(), arrayMessageTwo.Skip(j).Take(length).ToArray()));
                 }
             }
             return result.ToArray();
         }
-        
+
+        /// <summary>
+        /// Obtiene un arreglo que se obtiene de mergear dos arreglos con los siguientes criterios:
+        /// - Si la palabra es la misma en el mismo índice de los arreglos, se mantiene la palabra en ese índice del resultado.
+        /// - Si una palabra es vacío y otra no lo es, en el mismo índice, predomina la palabra no vacía para ese índice del resultado.
+        /// - Si las palabras en el mismo índice son distintas, en ese índice del resultado corresponde vacío.
+        /// </summary>
+        /// <param name="arrayMessageOne">Mensaje 1 con arreglo de cadenas</param>
+        /// <param name="arrayMessageTwo">Mensaje 2 con arreglo de cadenas</param>
+        /// <returns>Un arreglo con el merge de ambos mensajes</returns>
         public string[] ArrayStringMerge(string[] arrayMessageOne, string[] arrayMessageTwo)
         {
             var result = new List<string>();
