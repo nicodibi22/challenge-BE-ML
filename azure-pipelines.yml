@@ -35,4 +35,8 @@ steps:
     command: test
     projects: '**/challenge-tests/*.csproj'
     arguments: '--configuration $(buildConfiguration)'
+- task: PublishTestResults@2
+  inputs:
+    testResultsFormat: 'NUnit'
+    testResultsFiles: '**/TEST-*.xml'
 - task: PublishBuildArtifacts@1
