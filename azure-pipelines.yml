@@ -29,11 +29,15 @@ steps:
     configuration: '$(buildConfiguration)'
 
 - task: PublishBuildArtifacts@1
-- task: NuGetToolInstaller@1
+- task: VisualStudioTestPlatformInstaller@1
   inputs:
-    versionSpec: '5.x'
-- task: DotNetCoreCLI@2
+    packageFeedSelector: 'nugetOrg'
+    versionSelector: 'latestPreRelease'
+- task: VSTest@2
   inputs:
-    command: 'test'
-    projects: '**/*challenge-tests/*.csproj'
-    arguments: '--configuration $(buildConfiguration)'
+    testSelector: 'testAssemblies'
+    testAssemblyVer2: |
+      **\*test*.dll
+      !**\*TestAdapter.dll
+      !**\obj\**
+    searchFolder: '$(System.DefaultWorkingDirectory)'
