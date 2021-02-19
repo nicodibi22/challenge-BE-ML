@@ -7,6 +7,7 @@ namespace challenge_be_ml.Models
 {
     public class ListSatellites
     {
+        [System.ComponentModel.DataAnnotations.Required]
         public List<Satellite> satellites { get; set; }
     }
 }

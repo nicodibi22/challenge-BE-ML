@@ -37,9 +37,11 @@ namespace challenge_be_ml
         [Produces("application/json")]        
         public async Task<IActionResult> TopSecretAllSatellites([FromBody]ListSatellites satellites)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(new { message = "Verificar parámetros de entrada." });
             try
             {
-                PointFloat position = _locator.GetLocation(satellites.satellites.Select(s => s.distance).ToArray());
+                PointFloat position = _locator.GetLocation(satellites.satellites.Select(s => s.distance.Value).ToArray());
                 string message = _messageGenerator.GetMessage(satellites.satellites.Select(s => s.message).ToArray());
                 return Ok(new { position = new { x = position.X, y = position.Y }, message = message });
             }
@@ -65,12 +67,13 @@ namespace challenge_be_ml
         [Produces("application/json")]
         public async Task<IActionResult> TopSecretSatelliteName(string satellite_name, [FromBody]Models.Satellite satellite)
         {
-            
+            if (!ModelState.IsValid)
+                return BadRequest(new { message = "Verificar parámetros de entrada." });
             if (!_appSettings.satellites.Exists(s => s.Name.ToLower().Equals(satellite_name.ToLower())))
                 return BadRequest("La información proporcionada es incorrecta. Satélite: " + satellite_name);
             var satelliteData = JsonConvert.SerializeObject(satellite);
             HttpContext.Session.SetString(satellite_name.ToLower(), satelliteData);
-            return Ok(HttpContext.Session);           
+            return Ok();           
 
         }
 
@@ -86,7 +89,7 @@ namespace challenge_be_ml
                 Satellite satellite1 = JsonConvert.DeserializeObject<Satellite>(HttpContext.Session.GetString(_appSettings.satellites[0].Name.ToLower()));
                 Satellite satellite2 = JsonConvert.DeserializeObject<Satellite>(HttpContext.Session.GetString(_appSettings.satellites[1].Name.ToLower()));
                 Satellite satellite3 = JsonConvert.DeserializeObject<Satellite>(HttpContext.Session.GetString(_appSettings.satellites[2].Name.ToLower()));
-                PointFloat position = _locator.GetLocation(new float[] { satellite1.distance, satellite2.distance, satellite3.distance });
+                PointFloat position = _locator.GetLocation(new float[] { satellite1.distance.Value, satellite2.distance.Value, satellite3.distance.Value });
                 string message = _messageGenerator.GetMessage(satellite1.message, satellite2.message, satellite3.message);
                 return Ok(new { position = new { x = position.X, y = position.Y }, message = message });
             }

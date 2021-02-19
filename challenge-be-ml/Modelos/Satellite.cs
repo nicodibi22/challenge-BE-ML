@@ -8,7 +8,11 @@ namespace challenge_be_ml.Models
     public class Satellite
     {
         public string name { get; set; }
-        public float distance { get; set; }
+
+        [System.ComponentModel.DataAnnotations.Required]
+        public float? distance { get; set; }
+
+        [System.ComponentModel.DataAnnotations.Required]
         public string[] message { get; set; }
     }
 }
