@@ -30,7 +30,9 @@ steps:
 
 - task: VSTest@2
   inputs:
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
-    Framework: framework40
+    platform: 'Any CPU'
+    Framework: '.NETFramework,Version=v4.7.1'
+    command: test
+    projects: '**/challenge-tests/*.csproj'
+    arguments: '--configuration $(buildConfiguration)'
 - task: PublishBuildArtifacts@1
