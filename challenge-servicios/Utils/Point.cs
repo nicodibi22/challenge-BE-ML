@@ -2,14 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace challenge_servicios.implementaciones
+namespace challenge_servicios.Utils
 {
     public class Point
     {
-        public Point()
-        {
-
-        }
         public double X { get; set; }
         public double Y { get; set; }
     }

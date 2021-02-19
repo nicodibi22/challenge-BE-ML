@@ -11,6 +11,8 @@ namespace challenge_servicios.servicios
         /// </summary>
         /// <param name="messages">Mensajes recibidos por cada satélite. Cada mensaje corresponde a un arreglo de palabras.</param>
         /// <returns>Mensaje que se forma a partir de los mensajes recibidos.</returns>
+        /// <exception cref="System.ArgumentException"></exception>
+        /// <exception cref="System.ArgumentNullException"></exception>
         string GetMessage(params string[][] messages);
     }
 }

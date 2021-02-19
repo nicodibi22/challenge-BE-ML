@@ -75,48 +75,33 @@ namespace challenge_servicios.implementaciones
         }
 
         public string[][] Solutions(params string[][] messages)
-        {
-            string[] result = messages[0];
-            
+        {            
             int length = messages.Min(x => x.Length);
-            var pepe = algo(messages[0], messages[1], length);
-            var result2 = new List<string[]>();
-            foreach (var lala in pepe)
+            var resultsMergeM1M2 = MatrixStringMerge(messages[0], messages[1], length);
+            var resultMergeFinal = new List<string[]>();
+            foreach (var resultMergeM1M2 in resultsMergeM1M2)
             {
-                result2.AddRange(algo(lala, messages[2], length));
+                resultMergeFinal.AddRange(MatrixStringMerge(resultMergeM1M2, messages[2], length));
             }
                         
-            return result2.ToArray();
+            return resultMergeFinal.ToArray();
         }
 
 
-        public string[][] algo(string[] a, string[] b, int length)
+        public string[][] MatrixStringMerge(string[] message1, string[] message2, int length)
         {
 
             var result = new List<string []>();
-            for (int i = 0; i <= a.Length - length; i++)
+            for (int i = 0; i <= message1.Length - length; i++)
             {
-                for (int j = 0; j <= b.Length - length; j++)
+                for (int j = 0; j <= message2.Length - length; j++)
                 {
-                    result.Add(ArrayStringMerge(a.Skip(i).Take(length).ToArray(), b.Skip(j).Take(length).ToArray()));
+                    result.Add(ArrayStringMerge(message1.Skip(i).Take(length).ToArray(), message2.Skip(j).Take(length).ToArray()));
                 }
             }
             return result.ToArray();
         }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="arrayMessageOne"></param>
-        /// <param name="arrayMessageTwo"></param>
-        /// <returns></returns>
-        public string[] ArrayStringMerge(string[] arrayMessageOne, string[] arrayMessageTwo, int index1, int index2, int length)
-        {
-            
-            return ArrayStringMerge(arrayMessageOne.Skip(index1).Take(length).ToArray(), arrayMessageTwo.Skip(index2).Take(length).ToArray());
-            
-        }
-
+        
         public string[] ArrayStringMerge(string[] arrayMessageOne, string[] arrayMessageTwo)
         {
             var result = new List<string>();
@@ -134,72 +119,6 @@ namespace challenge_servicios.implementaciones
             }
 
             return result.ToArray();
-        }
-
-        public string[] ArrayStringMerger2(string[] arrayMessageOne, string[] arrayMessageTwo)
-        {
-            var result = new List<string>();
-
-            if (arrayMessageOne.Length != arrayMessageTwo.Length)
-                throw new ArgumentException("La cantidad de emisores no corresponde con la esperada.");
-
-            int indexOne, indexTwo, cantCoincidencias = 0, auxcantCoincidencias;
-            int indexOneResult;
-            int indexTwoResult;
-            for (int i = 0; i <= 1; i++)
-            {
-                indexOne = i;
-                for (int j = 0; j <= 1; j++)
-                {
-                    indexTwo = j;
-                    auxcantCoincidencias = ContarCoincidenciasNoVacias(arrayMessageOne, arrayMessageTwo, indexOne, indexTwo);
-                    if (auxcantCoincidencias > cantCoincidencias)
-                    {
-                        indexOneResult = indexOne;
-                        indexTwoResult = indexTwo;
-                        cantCoincidencias = auxcantCoincidencias;
-                    }
-                }
-
-            }
-
-            return result.ToArray();
-        }
-
-        public string[] ArrayStringMergeFromIndex(string[] arrayMessageOne, string[] arrayMessageTwo, int indexOne, int indexTwo)
-        {
-            var result = new List<string>();
-
-            return result.ToArray();
-        }
-
-        public int CoincidenciasConDesfasaje(string[] arrayMessageOne, string[] arrayMessageTwo)
-        {            
-            int indexOne = 0, indexTwo = 0, result = 0, auxResult;
-            int indexOneResult = 0; 
-            int indexTwoResult = 0;
-            for (int i = 0; i <= 1; i++)
-            {
-                auxResult = ContarCoincidenciasNoVacias(arrayMessageOne, arrayMessageTwo, indexOne, indexTwo);
-                if (auxResult > result)
-                {
-                    indexOneResult = indexOne;
-                    indexTwoResult = indexTwo;
-                    result = auxResult;
-                }
-            }
-            
-
-            return result;
-        }
-
-        private int ContarCoincidenciasNoVacias(string[] arrayMessageOne, string[] arrayMessageTwo, int indexOne, int indexTwo)
-        {
-            if (arrayMessageOne.Length == indexOne || arrayMessageTwo.Length == indexTwo)
-                return 0;
-
-            return (arrayMessageOne[indexOne].Equals(arrayMessageTwo[indexTwo]) && !string.IsNullOrEmpty(arrayMessageOne[indexOne]) ? 1 : 0) 
-                + ContarCoincidenciasNoVacias(arrayMessageOne, arrayMessageTwo, indexOne + 1, indexTwo + 1);
-        }
+        }        
     }
 }
