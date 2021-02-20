@@ -116,7 +116,7 @@ namespace challenge_servicios.implementaciones
         /// </summary>
         /// <param name="messages">Arreglo los 3 mensajes obtenidos de los satélites</param>
         /// <returns>Todas las soluciones posibles de mergear las cadenas de los satélites.</returns>
-        public string[][] Solutions(params string[][] messages)
+        private string[][] Solutions(params string[][] messages)
         {            
             int length = messages.Min(x => x.Length);
             var resultsMergeM1M2 = StringMerge.MatrixStringMerge(messages[0], messages[1], length);
@@ -132,6 +132,12 @@ namespace challenge_servicios.implementaciones
             return resultMergeFinal.ToArray();
         }
 
+        /// <summary>
+        /// Obtiene todas las posibles soluciones de mergear las 3 cadenas obtenidas de los satelites si se considera
+        /// que las 3 se encuentran desfasadas
+        /// </summary>
+        /// <param name="messages">Arreglo los 3 mensajes obtenidos de los satélites</param>
+        /// <returns>Todas las soluciones posibles de mergear las cadenas de los satélites de forma desfasada.</returns>
         private string[][] SolutionsAllGaps(string[][] messages)
         {
             var resultMergeFinal = new List<string[]>();
