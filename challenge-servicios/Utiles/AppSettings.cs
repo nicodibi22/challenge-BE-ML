@@ -8,5 +8,6 @@ namespace challenge_be_ml.Utils
     public class AppSettings
     {
         public List<Satellite> satellites { get; set; }
+
     }
 }

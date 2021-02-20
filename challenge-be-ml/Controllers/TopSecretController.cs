@@ -34,7 +34,7 @@ namespace challenge_be_ml
         [HttpPost("topsecret")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
-        [Produces("application/json")]        
+        [Produces("application/json")]
         public async Task<IActionResult> TopSecretAllSatellites([FromBody]ListSatellites listSatellites)
         {
             if (!ModelState.IsValid)

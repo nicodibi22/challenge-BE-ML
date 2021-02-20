@@ -15,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
+
 namespace challenge_be_ml
 {
     public class Startup
@@ -41,11 +42,11 @@ namespace challenge_be_ml
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
-
+            
             services.AddScoped<Locator, SpaceshipLocator>();
             services.AddScoped<Trilateration, Trilateration2D>();
-            services.AddScoped<MessageGenerator, SatellitesMessageGenerator>();         
-
+            services.AddScoped<MessageGenerator, SatellitesMessageGenerator>();
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

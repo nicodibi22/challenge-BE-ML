@@ -96,7 +96,10 @@ namespace challenge_servicios.implementaciones
                     .ToDictionary(x => x.Key, x => x.Count());
 
                 // Se verifica si en el diccionario auxiliar hay más palabras sin repetir que en el diccionario original
-                if (auxStringsRepetitions.Count(x => !x.Key.Equals("")) > repetitions)
+                // Y se verifica si en los extremos hay palabras repetidas
+                if (auxStringsRepetitions.Count(x => !x.Key.Equals("")) > repetitions
+                    || (auxStringsRepetitions.Count(x => !x.Key.Equals("")) == repetitions
+                    && solution.Length > 1 && (solution[0].Equals(solution[1]) || solution[solution.Length - 1].Equals(solution[solution.Length - 2]))))
                 {
                     // Si hay más palabras sin repetir se determina que es un mensaje más certero, 
                     // ya que la repetición de palabras se puede deber al desfasaje del mensaje.
@@ -122,9 +125,29 @@ namespace challenge_servicios.implementaciones
             {
                 resultMergeFinal.AddRange(StringMerge.MatrixStringMerge(resultMergeM1M2, messages[2], length));
             }
-                        
+
+            resultMergeFinal.AddRange(SolutionsAllGaps(messages));
+
+
             return resultMergeFinal.ToArray();
         }
-        
+
+        private string[][] SolutionsAllGaps(string[][] messages)
+        {
+            var resultMergeFinal = new List<string[]>();
+            if ((messages[0].First().Equals("") || messages[0].Last().Equals("")) &&
+                (messages[1].First().Equals("") || messages[1].Last().Equals("")) &&
+                (messages[2].First().Equals("") || messages[2].Last().Equals("")))
+            {
+                int length = messages.Min(x => x.Length - 1);
+                var resultsMergeM1M2 = StringMerge.MatrixStringMerge(messages[0], messages[1], length);
+                foreach (var resultMergeM1M2 in resultsMergeM1M2)
+                {
+                    resultMergeFinal.AddRange(StringMerge.MatrixStringMerge(resultMergeM1M2, messages[2], length));
+                }
+                
+            }
+            return resultMergeFinal.ToArray();
+        }
     }
 }
